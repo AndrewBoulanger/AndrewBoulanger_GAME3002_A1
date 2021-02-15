@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI m_ScoreText = null;
     [SerializeField]
     private TextMeshProUGUI m_SpeedText = null;
+    [SerializeField]
+    private Slider m_KickScrollBar = null;
 
     public void OnRequestUpdateUI(Vector3 vDir, float fKickStrength, int iScore)
     {
@@ -25,6 +28,7 @@ public class UIManager : MonoBehaviour
     public void UpdateKickStrength(float fKickStrength)
     {
         m_KickStrengthText.text = "Kick Strenght: " + fKickStrength + " m/s";
+        m_KickScrollBar.value = fKickStrength;
     }
 
     public void UpdateScore(int score)

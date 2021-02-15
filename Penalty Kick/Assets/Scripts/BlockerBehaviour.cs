@@ -23,7 +23,7 @@ public class BlockerBehaviour : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(m_fDelay > 0)
         {
@@ -33,7 +33,7 @@ public class BlockerBehaviour : MonoBehaviour
         if (m_fDelay <= 0)
         {
             Assert.IsNotNull(m_ball);
-            if (!m_ball.GetIsKicked())
+            if (m_ball.GetIsKicked())
             {
                 float displacement = transform.position.x - m_ball.transform.position.x;
                 chooseJumpDir(displacement);
