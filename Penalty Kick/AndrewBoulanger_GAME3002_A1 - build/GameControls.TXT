@@ -1,0 +1,9 @@
+
+Use mouse X to aim the ball left or right
+
+W and S or the up and down arrows to aim the ball up and down
+
+hold space to charge up your kick strength and release it to kick
+
+the ball cannot be aimed or kicked again while it's active, 
+it'll reset when it stops moving, moves away from the net, a goal is scored, if it falls bellow the map
