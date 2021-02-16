@@ -1,38 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 
 public class ParticleMovement : MonoBehaviour
 {
     //kick info variables
-    [SerializeField]
-    private bool m_bAiming;
-    [SerializeField]
-    private Vector3 m_vDirection;
-    private Vector3 m_vPrevDir;
-    [SerializeField]
+    
+    private bool m_bAiming = true;
+    private Vector3 m_vDirection = Vector3.zero;
+    private Vector3 m_vPrevDir = Vector3.zero;
     private float m_fKickStrength = 0;
     [SerializeField]
-    private Vector3 m_vStartingPos;
+    private Vector3 m_vStartingPos = Vector3.zero ;
 
     //UI variables
     [SerializeField]
-    private GameObject m_arrow;
+    private GameObject m_arrow = null;
+    [SerializeField]
     private UIManager m_interface = null;
     private bool m_bPowerDecreasing = false;
 
     private int m_iScore = 0;
     private bool m_bJustScored = false;
+    private int m_numOfKicks = 0;
 
     //reset tools
     [SerializeField]
-    private bool m_bDebugReset;
+    private bool m_bDebugReset = false;
     public bool m_bWasReset;
     private bool m_bPrepairToReset = false;
     private float m_fResetTimer;
 
 
     private Rigidbody m_rb;
+    [SerializeField]
+    private MySceneManager m_sceneManager = null;
 
     //getters and setters
     public bool GetIsKicked()
@@ -46,10 +50,10 @@ public class ParticleMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_interface = GetComponent<UIManager>();
+        Assert.IsNotNull(m_interface);
         m_interface.OnRequestUpdateUI(m_vDirection, m_fKickStrength, 0);
         m_rb = GetComponent<Rigidbody>();
-        m_rb.sleepThreshold = 10f;
+        m_rb.sleepThreshold = 10f;  //10f ~ 0.5 m/s
         m_bAiming = true;
 
         transform.position = m_vStartingPos;
@@ -137,8 +141,16 @@ public class ParticleMovement : MonoBehaviour
         m_arrow.SetActive(true);
         m_vDirection = Vector3.zero;
         m_bAiming = true;
+        m_bJustScored = false;
         m_interface.OnRequestUpdateUI(m_vDirection, m_fKickStrength, m_iScore);
         m_bPrepairToReset = false;
+
+        m_numOfKicks++;
+        //load game over screen
+        if (m_numOfKicks >= 10)
+        {
+            m_sceneManager.LoadScene(false);
+        }
     }
 
     void prepairToReset(float time)
@@ -160,10 +172,10 @@ public class ParticleMovement : MonoBehaviour
             m_bDebugReset = false;
             resetBall();
         }
-        else if(transform.position.z >= 30f || m_rb.velocity.z < 0)
+        else if(m_bJustScored || transform.position.z >= 30f || m_rb.velocity.z < 0)
         {
             prepairToReset(4f);
-            print("reset: moving backwards or past goal");
+            print("reset: Scored, moving backwards or past goal");
         }
         else if (m_rb.IsSleeping() || transform.position.y < -1.0f)
         {
@@ -172,4 +184,21 @@ public class ParticleMovement : MonoBehaviour
         }
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("GoalZone") && !m_bJustScored)
+        {
+            m_iScore++;
+            m_bJustScored = true;
+            m_interface.UpdateScore(m_iScore);
+            print("scored");
+        }
+    }
+
+
+    private void OnDisable()
+    {
+        PlayerPrefs.SetInt("Score", m_iScore);
+    }
 }

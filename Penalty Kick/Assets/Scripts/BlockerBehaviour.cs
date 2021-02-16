@@ -8,7 +8,11 @@ public class BlockerBehaviour : MonoBehaviour
     [SerializeField]
     private ParticleMovement m_ball = null;
     [SerializeField]
-    private float m_xRange;
+    private float m_xRange = 12;
+    [SerializeField]
+    private float m_xOffset = 0;
+    [SerializeField]
+    private float m_fJumpForce = 10f;
 
     private float m_fBufferZone = 0.1f;
 
@@ -40,7 +44,7 @@ public class BlockerBehaviour : MonoBehaviour
             }
             else
             { 
-                float displacement = transform.position.x / m_xRange - m_ball.GetYaw()*2;
+                float displacement = (transform.position.x + m_xOffset) / m_xRange - m_ball.GetYaw()*2;
                 chooseJumpDir(displacement);
             }
         }
@@ -51,17 +55,17 @@ public class BlockerBehaviour : MonoBehaviour
     {
         if (displacement >= m_fBufferZone)
         {
-            jump(-1.5f);
+            jump(-m_fJumpForce);
         }
         else if (displacement <= -m_fBufferZone)
         {
-            jump(1.5f);
+            jump(m_fJumpForce);
         }
     }
 
     void jump(float dir)
     {
-        m_rb.AddForce(dir, 1.5f, 0, ForceMode.Impulse);
-        m_fDelay = 0.2f;
+        m_rb.AddForce(dir, m_fJumpForce, 0, ForceMode.Impulse);
+        m_fDelay = 0.18f;
     }
 }

@@ -20,20 +20,20 @@ public class UIManager : MonoBehaviour
     public void OnRequestUpdateUI(Vector3 vDir, float fKickStrength, int iScore)
     {
         m_DirectionText.text = "direction: " + vDir.ToString();
-        m_KickStrengthText.text = "Kick Strenght: " + fKickStrength + " m/s";
+        m_KickStrengthText.text = "Kick Strenght: " + (int)fKickStrength + " m/s";
         UpdateScore(iScore);
         UpdateSpeed(0);
     }
 
     public void UpdateKickStrength(float fKickStrength)
     {
-        m_KickStrengthText.text = "Kick Strenght: " + fKickStrength + " m/s";
+        m_KickStrengthText.text = "Kick Strenght: " + (int)fKickStrength + " m/s";
         m_KickScrollBar.value = fKickStrength;
     }
 
     public void UpdateScore(int score)
     {
-        m_ScoreText.text = "Score: " + score;
+        m_ScoreText.text = "Score: " + score + "/10";
     }
     public void UpdateSpeed(float speed)
     {
