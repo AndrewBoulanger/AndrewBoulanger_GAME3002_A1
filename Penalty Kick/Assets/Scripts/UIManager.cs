@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     public void OnRequestUpdateUI(Vector3 vDir, float fKickStrength, int iScore)
     {
         m_DirectionText.text = "direction: " + vDir.ToString();
-        m_KickStrengthText.text = "Kick Strenght: " + (int)fKickStrength + " m/s";
+        m_KickStrengthText.text = "Kick Strenght: " + (int)fKickStrength + " m/s (hold space to charge)";
         UpdateScore(iScore);
         UpdateSpeed(0);
     }

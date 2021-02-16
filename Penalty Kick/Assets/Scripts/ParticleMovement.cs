@@ -62,17 +62,14 @@ public class ParticleMovement : MonoBehaviour
     //set arrow based on mouse and vertical inputs, updates m_vDirection and UI
     void UpdateArrow()
     {
-        if (transform.hasChanged)
-        {
-            transform.Rotate(0f, Input.GetAxis("Mouse X"), 0.0f);
-            m_arrow.transform.RotateAround(transform.position, transform.right, -Input.GetAxisRaw("Vertical"));
+        transform.Rotate(0f, Input.GetAxis("Mouse X"), 0.0f);
+        m_arrow.transform.RotateAround(transform.position, transform.right, -Input.GetAxisRaw("Vertical"));
 
-            m_vDirection = (m_arrow.transform.position - transform.position).normalized;
-            if (m_vPrevDir != m_vDirection)
-            {
-                m_interface.OnRequestUpdateUI(m_vDirection, m_fKickStrength, m_iScore);
-                m_vPrevDir = m_vDirection;
-            }
+        m_vDirection = (m_arrow.transform.position - transform.position).normalized;
+        if (m_vPrevDir != m_vDirection)
+        {
+            m_interface.OnRequestUpdateUI(m_vDirection, m_fKickStrength, m_iScore);
+            m_vPrevDir = m_vDirection;
         }
     }
 
